@@ -7,8 +7,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-
 import styles from './CallDetail.module.css';
+import Loader from '../Loader/loader';
+import Snackbar from '../Snackbar/snackbar';
 
 function CreatedAt({date}) {
     let d = '';
@@ -46,6 +47,7 @@ function Duration({time}) {
 
 export default function CallDetail(props) {
     const call = props.callDetail;
+
     return(
         <div>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -71,6 +73,7 @@ export default function CallDetail(props) {
                     </TableHead>
 
                     <TableBody>
+                        {props.callsDetailLoading && <div style={{display: 'flex', justifyContent: 'center'}}><Loader /></div>}
                         <TableRow
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             className={styles.RowTable}
@@ -100,6 +103,9 @@ export default function CallDetail(props) {
                 </Table>
             </TableContainer>
 
+            <Snackbar open={props.archiveSuccess} setOpen={props.setArchiveSuccess} message="Call Archived" />
+            <Snackbar open={props.addNoteSuccess} setOpen={props.setAddNoteSuccess} message="Note Added" />
+            
             <textarea className={styles.TextArea} onChange={props.onNoteChange} value={props.note}></textarea>
             <button className={styles.ArchiveBtn} onClick={() => props.onAddNote(call.id)}>Add Note</button>
 

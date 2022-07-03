@@ -7,13 +7,16 @@ import CallDetailModal from '../../components/Calls/CallDetail/CallDetail';
 import styles from './calls.module.css';
 
 export default function Calls() {
-    const [calls, setCalls ] = useState([]);
+    const [ calls, setCalls ] = useState([]);
     const [ currentPage, setCurrentPage ] = useState(1);
     const [ showCallDetailModal, setShowCallDetailModal ] = useState(false);
     const [ callDetail, setCallDetail ] = useState(null);
     const [ note, setNote ] = useState('');
     const [ totalPages, setTotalPages ] = useState(1);
     const [ callsLoading, setCallsLoading ] = useState(true);
+    const [ callsDetailLoading, setCallsDetailLoading ] = useState(true);
+    const [ archiveSuccess, setArchiveSuccess ] = useState(false);
+    const [ addNoteSuccess, setAddNoteSuccess ] = useState(false);
 
     useEffect(() => {
         let token = localStorage.getItem('token');
@@ -108,6 +111,7 @@ export default function Calls() {
 
             if(response && response.data) {
                 setCallDetail(response.data);
+                setCallsDetailLoading(false);
             }
         })
         .catch((error) => {
@@ -121,6 +125,7 @@ export default function Calls() {
             else {
                 alert("Something went wrong");
             }
+            setCallsDetailLoading(false);
         })
     }
 
@@ -137,6 +142,8 @@ export default function Calls() {
             if(response && response.data) {
                 call1.is_archived = response.data.is_archived;
                 setCallDetail(call1);
+                setAddNoteSuccess(false);
+                setArchiveSuccess(true);
             }
             
         })
@@ -167,6 +174,8 @@ export default function Calls() {
                 callD.notes = response.data.notes;
                 setCallDetail(callD);
                 setNote('');
+                setArchiveSuccess(false);
+                setAddNoteSuccess(true);
             }
             
         })
@@ -268,7 +277,7 @@ export default function Calls() {
             <CallsTable calls={calls} onPageChange={onPageChange} page={currentPage} CallDetail={CallDetail} GroupByDate={GroupByDate} totalPages={totalPages} callsLoading={callsLoading} />
             
             <Modal showModal={showCallDetailModal}>
-                <CallDetailModal callDetail={callDetail} Close={CloseCallDetail} onArchive={onArchive} note={note} onNoteChange={onNoteChange} onAddNote={onAddNote} />
+                <CallDetailModal callDetail={callDetail} Close={CloseCallDetail} onArchive={onArchive} note={note} onNoteChange={onNoteChange} onAddNote={onAddNote} callsDetailLoading={callsDetailLoading} archiveSuccess={archiveSuccess} setArchiveSuccess={setArchiveSuccess} addNoteSuccess={addNoteSuccess} setAddNoteSuccess={setAddNoteSuccess} />
             </Modal>
         </div>
     );
