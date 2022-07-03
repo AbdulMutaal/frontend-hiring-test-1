@@ -1,0 +1,41 @@
+.CallDetailHeading{
+    font-style: normal;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 27px;
+
+    color: #141B22;
+}
+
+.TableRow{
+    white-space: nowrap;
+    font-weight: 800 !important;
+}
+
+.CloseIcon{
+    cursor: pointer;
+}
+
+.ArchiveBtn{
+    border: none;
+    border-radius: 5px;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+
+.ArchiveBtn:hover{
+    border: 1px solid #141B22;
+}
+
+.TextArea{
+    margin-top: 20px;
+    width: 47%;
+    height: 100px;
+    font-size: 18px;
+    padding: 10px;
+}

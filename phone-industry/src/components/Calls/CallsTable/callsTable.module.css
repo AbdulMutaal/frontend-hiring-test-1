@@ -1,0 +1,17 @@
+.TableRow{
+    font-weight: 800 !important;
+}
+
+.TableCont{
+    height: 500px;
+    overflow-y: scroll;
+    box-shadow: inset;
+}
+
+.RowTable{
+    cursor: pointer;
+}
+
+.RowTable:hover{
+    background-color: rgb(229, 229, 229, 0.5);
+}

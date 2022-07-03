@@ -1,0 +1,11 @@
+.PaginationCon ul{
+    display: flex;
+}
+
+.PaginationCon ul li{
+    margin: 10px;
+}
+
+::marker{
+    display: none;  
+}
