@@ -13,6 +13,7 @@ export default function Calls() {
     const [ callDetail, setCallDetail ] = useState(null);
     const [ note, setNote ] = useState('');
     const [ totalPages, setTotalPages ] = useState(1);
+    const [ callsLoading, setCallsLoading ] = useState(true);
 
     useEffect(() => {
         let token = localStorage.getItem('token');
@@ -34,6 +35,8 @@ export default function Calls() {
 
     function onPageChange(event: React.ChangeEvent<unknown>, page: number) {
         let token = localStorage.getItem('token');
+        setCallsLoading(true);
+        setCalls([]);
 
         if((!token) || token === 'null') {
             getToken();
@@ -76,14 +79,22 @@ export default function Calls() {
 
             if(response && response.data && response.data.nodes) {
                 setCalls(response.data.nodes);
+                setCallsLoading(false);
                 setTotalPages(Math.ceil(response.data.totalCount/10));
             }
         })
         .catch((error) => {
 
             if(error && error.response && error.response.data && error.response.data.statusCode === 401) {
-                getToken();
+                alert("Token has expired. Please refresh the page");
             }
+            else if(error && error.response && error.response.data && error.response.data.message) {
+                alert(error.response.data.message);
+            }
+            else {
+                alert("Something went wrong");
+            }
+            setCallsLoading(false);
         })
     }
 
@@ -100,11 +111,15 @@ export default function Calls() {
             }
         })
         .catch((error) => {
-            console.log("ERROR");
-            console.log(error.response);
 
             if(error && error.response && error.response.data && error.response.data.statusCode === 401) {
-                getToken();
+                alert("Token has expired. Please refresh the page");
+            }
+            else if(error && error.response && error.response.data && error.response.data.message) {
+                alert(error.response.data.message);
+            }
+            else {
+                alert("Something went wrong");
             }
         })
     }
@@ -125,6 +140,18 @@ export default function Calls() {
             }
             
         })
+        .catch((error) => {
+
+            if(error && error.response && error.response.data && error.response.data.statusCode === 401) {
+                alert("Token has expired. Please refresh the page");
+            }
+            else if(error && error.response && error.response.data && error.response.data.message) {
+                alert(error.response.data.message);
+            }
+            else {
+                alert("Something went wrong");
+            }
+        })
     }
 
     function AddNote(token, id, data) {
@@ -142,6 +169,18 @@ export default function Calls() {
                 setNote('');
             }
             
+        })
+        .catch((error) => {
+
+            if(error && error.response && error.response.data && error.response.data.statusCode === 401) {
+                alert("Token has expired. Please refresh the page");
+            }
+            else if(error && error.response && error.response.data && error.response.data.message) {
+                alert(error.response.data.message);
+            }
+            else {
+                alert("Something went wrong");
+            }
         })
     }
 
@@ -220,12 +259,13 @@ export default function Calls() {
                 localStorage.setItem("token", response.data.access_token);
             }
         })
+
     }
 
     return(
         <div className={styles.MainDiv}>
             <h3 className={styles.CallsHeading}>Calls</h3>
-            <CallsTable calls={calls} onPageChange={onPageChange} page={currentPage} CallDetail={CallDetail} GroupByDate={GroupByDate} totalPages={totalPages} />
+            <CallsTable calls={calls} onPageChange={onPageChange} page={currentPage} CallDetail={CallDetail} GroupByDate={GroupByDate} totalPages={totalPages} callsLoading={callsLoading} />
             
             <Modal showModal={showCallDetailModal}>
                 <CallDetailModal callDetail={callDetail} Close={CloseCallDetail} onArchive={onArchive} note={note} onNoteChange={onNoteChange} onAddNote={onAddNote} />

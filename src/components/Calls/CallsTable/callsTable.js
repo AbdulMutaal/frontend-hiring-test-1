@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper';
 
 import Pagination from '../Pagination/pagination';
 import styles from './callsTable.module.css';
+import Loader from '../Loader/loader';
 
 function CreatedAt({date}) {
     let d = '';
@@ -41,6 +42,8 @@ export default function CallsTable(props) {
     <>  
         <div className={styles.TableCont}>
             <TableContainer component={Paper}>
+                
+
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead style={{position: 'sticky', top: '0', background: 'white'}}>
                         <TableRow>
@@ -53,6 +56,7 @@ export default function CallsTable(props) {
                     </TableHead>
 
                     <TableBody>
+                    {props.callsLoading && <div style={{display: 'flex', justifyContent: 'center'}}><Loader /></div>}
                     {props.calls && props.calls.map((call, i) => (
                         <TableRow
                         key={call.id}
