@@ -25,12 +25,12 @@ export default function Calls() {
 
         if((!token) || token === 'null') {
             getToken();
-            token = localStorage.getItem('token');
-            getCalls(token, 1);
+            // token = localStorage.getItem('token');
+            // getCalls(token, 1);
 
         }
         else {    
-            RefreshToken(token); 
+            // RefreshToken(token); 
             getCalls(token, 1);
         }
      // eslint-disable-next-line
@@ -44,10 +44,10 @@ export default function Calls() {
         if((!token) || token === 'null') {
             getToken();
 
-            token = localStorage.getItem('token');
+            // token = localStorage.getItem('token');
 
-            setCurrentPage(page);     
-            getCalls(token, 10*(page-1));
+            // setCurrentPage(page);     
+            // getCalls(token, 10*(page-1));
         }
         else { 
             setCurrentPage(page);     
@@ -90,6 +90,7 @@ export default function Calls() {
 
             if(error && error.response && error.response.data && error.response.data.statusCode === 401) {
                 alert("Token has expired. Please refresh the page");
+                getToken();
             }
             else if(error && error.response && error.response.data && error.response.data.message) {
                 alert(error.response.data.message);
@@ -118,6 +119,7 @@ export default function Calls() {
 
             if(error && error.response && error.response.data && error.response.data.statusCode === 401) {
                 alert("Token has expired. Please refresh the page");
+                getToken();
             }
             else if(error && error.response && error.response.data && error.response.data.message) {
                 alert(error.response.data.message);
@@ -125,6 +127,7 @@ export default function Calls() {
             else {
                 alert("Something went wrong");
             }
+            localStorage.setItem('token', null);
             setCallsDetailLoading(false);
         })
     }
@@ -151,6 +154,7 @@ export default function Calls() {
 
             if(error && error.response && error.response.data && error.response.data.statusCode === 401) {
                 alert("Token has expired. Please refresh the page");
+                getToken();
             }
             else if(error && error.response && error.response.data && error.response.data.message) {
                 alert(error.response.data.message);
@@ -158,6 +162,7 @@ export default function Calls() {
             else {
                 alert("Something went wrong");
             }
+            localStorage.setItem('token', null);
         })
     }
 
@@ -183,6 +188,7 @@ export default function Calls() {
 
             if(error && error.response && error.response.data && error.response.data.statusCode === 401) {
                 alert("Token has expired. Please refresh the page");
+                getToken();
             }
             else if(error && error.response && error.response.data && error.response.data.message) {
                 alert(error.response.data.message);
@@ -190,6 +196,7 @@ export default function Calls() {
             else {
                 alert("Something went wrong");
             }
+            localStorage.setItem('token', null);
         })
     }
 
@@ -200,8 +207,8 @@ export default function Calls() {
 
         if((!token) || token === 'null') {
             getToken();
-            token = localStorage.getItem('token');
-            getSingleCall(token, callId);
+            // token = localStorage.getItem('token');
+            // getSingleCall(token, callId);
         }
         else { 
             getSingleCall(token, callId);
@@ -218,8 +225,8 @@ export default function Calls() {
         if((!token) || token === 'null') {
             getToken();
 
-            token = localStorage.getItem('token');
-            ArchiveCall(token, id);
+            // token = localStorage.getItem('token');
+            // ArchiveCall(token, id);
         }
         else { 
             ArchiveCall(token, id);
@@ -237,9 +244,9 @@ export default function Calls() {
 
         if((!token) || token === 'null') {
             getToken();
-            token = localStorage.getItem('token');
+            // token = localStorage.getItem('token');
 
-            AddNote(token, id, postData);
+            // AddNote(token, id, postData);
         }
         else { 
             AddNote(token, id, postData);
@@ -256,24 +263,25 @@ export default function Calls() {
         setCalls(grouped_calls);
     }
 
-    async function RefreshToken(token) {
+    // async function RefreshToken(token) {
         
-        await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/refresh-token`, {}, {
-            headers: {
-                "Authorization" : `Bearer ${token}`
-            }
-        })
-        .then((response) => {
-            if(response && response.data && response.data.access_token) {
-                localStorage.setItem("token", response.data.access_token);
-            }
-        })
+    //     await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/refresh-token`, {}, {
+    //         headers: {
+    //             "Authorization" : `Bearer ${token}`
+    //         }
+    //     })
+    //     .then((response) => {
+    //         if(response && response.data && response.data.access_token) {
+    //             localStorage.setItem("token", response.data.access_token);
+    //         }
+    //     })
 
-    }
+    // }
 
     return(
         <div className={styles.MainDiv}>
             <h3 className={styles.CallsHeading}>Calls</h3>
+            <button className={styles.FilterArchiveBtn}>Show Archived Only</button>
             <CallsTable calls={calls} onPageChange={onPageChange} page={currentPage} CallDetail={CallDetail} GroupByDate={GroupByDate} totalPages={totalPages} callsLoading={callsLoading} />
             
             <Modal showModal={showCallDetailModal}>
