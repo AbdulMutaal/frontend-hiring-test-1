@@ -56,13 +56,17 @@ export default function Calls() {
 
         await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/login`, postData)
         .then((response) => {
+            console.log(response);
             if(response && response.data && response.data.access_token) {
+                console.log("DFS");
                 localStorage.setItem('token', response.data.access_token);
             }
         })
     }
 
     function getCalls(token, offset) {
+        console.log(token);
+        console.log(offset);
         axios.get(`${process.env.REACT_APP_API_BASE_URL}/calls?offset=${offset}&limit=10`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -77,7 +81,7 @@ export default function Calls() {
         .catch((error) => {
 
             if(error && error.response && error.response.data && error.response.data.statusCode === 401) {
-                localStorage.setItem('token', null);
+                getToken();
             }
         })
     }
@@ -99,7 +103,7 @@ export default function Calls() {
             console.log(error.response);
 
             if(error && error.response && error.response.data && error.response.data.statusCode === 401) {
-                localStorage.setItem('token', null);
+                getToken();
             }
         })
     }

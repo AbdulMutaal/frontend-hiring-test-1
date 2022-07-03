@@ -1,27 +1,25 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-phone-industry/node_modules
-phone-industry/.pnp
-phone-industry/.pnp.js
+/node_modules
+/.pnp
+.pnp.js
 
 # testing
-phone-industry/coverage
+/coverage
 
 # production
-phone-industry/build
+/build
 
 # misc
-phone-industry/.DS_Store
-phone-industry/.env
-phone-industry/.env.local
-phone-industry/.env.development.local
-phone-industry/.env.test.local
-phone-industry/.env.production.local
-phone-industry/package-lock.json
-
-phone-industry/npm-debug.log*
-phone-industry/yarn-debug.log*
-phone-industry/yarn-error.log*
-
 .DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+/package-lock.json
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
