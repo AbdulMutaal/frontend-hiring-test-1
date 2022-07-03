@@ -281,7 +281,7 @@ export default function Calls() {
     return(
         <div className={styles.MainDiv}>
             <h3 className={styles.CallsHeading}>Calls</h3>
-            <button className={styles.FilterArchiveBtn}>Show Archived Only</button>
+            {/* <button className={styles.FilterArchiveBtn}>Show Archived Only</button> */}
             <CallsTable calls={calls} onPageChange={onPageChange} page={currentPage} CallDetail={CallDetail} GroupByDate={GroupByDate} totalPages={totalPages} callsLoading={callsLoading} />
             
             <Modal showModal={showCallDetailModal}>
