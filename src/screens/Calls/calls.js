@@ -21,15 +21,14 @@ export default function Calls() {
         if((!token) || token === 'null') {
             getToken();
             token = localStorage.getItem('token');
-
             getCalls(token, 1);
 
         }
         else {    
-            RefreshToken(token);  
+            RefreshToken(token); 
             getCalls(token, 1);
         }
-    
+     // eslint-disable-next-line
     }, [])
 
     function onPageChange(event: React.ChangeEvent<unknown>, page: number) {
