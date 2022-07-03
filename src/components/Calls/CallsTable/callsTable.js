@@ -75,7 +75,7 @@ export default function CallsTable(props) {
         </div>
         
         <div style={{marginTop: '10px'}}>
-            <Pagination onPageChange={props.onPageChange} page={props.page} />
+            <Pagination onPageChange={props.onPageChange} page={props.page} totalPages={props.totalPages}/>
         </div>
         
     </>

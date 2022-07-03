@@ -6,7 +6,7 @@ export default function BasicPagination(props) {
 
   return (
     <Stack spacing={2}>
-      <Pagination onChange={(event, page) => {props.onPageChange(event, page)}} count={10} page={props.page} />
+      <Pagination onChange={(event, page) => {props.onPageChange(event, page)}} count={props.totalPages} page={props.page} />
     </Stack>
   );
 }

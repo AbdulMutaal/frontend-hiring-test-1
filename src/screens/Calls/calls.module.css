@@ -5,3 +5,13 @@
     line-height: 25px;
     color: #4E5B68;
 }
+
+.MainDiv{
+    padding: 50px;
+}
+
+@media (max-width: 500px) {
+    .MainDiv{
+        padding: 5px;
+    }
+}

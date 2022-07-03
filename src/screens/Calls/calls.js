@@ -12,6 +12,7 @@ export default function Calls() {
     const [ showCallDetailModal, setShowCallDetailModal ] = useState(false);
     const [ callDetail, setCallDetail ] = useState(null);
     const [ note, setNote ] = useState('');
+    const [ totalPages, setTotalPages ] = useState(1);
 
     useEffect(() => {
         let token = localStorage.getItem('token');
@@ -40,11 +41,11 @@ export default function Calls() {
             token = localStorage.getItem('token');
 
             setCurrentPage(page);     
-            getCalls(token, 10*page);
+            getCalls(token, 10*(page-1));
         }
         else { 
             setCurrentPage(page);     
-            getCalls(token, 10*page);
+            getCalls(token, 10*(page-1));
         }
     }
 
@@ -75,6 +76,7 @@ export default function Calls() {
 
             if(response && response.data && response.data.nodes) {
                 setCalls(response.data.nodes);
+                setTotalPages(Math.ceil(response.data.totalCount/10));
             }
         })
         .catch((error) => {
@@ -221,9 +223,9 @@ export default function Calls() {
     }
 
     return(
-        <div style={{padding: '50px'}}>
+        <div className={styles.MainDiv}>
             <h3 className={styles.CallsHeading}>Calls</h3>
-            <CallsTable calls={calls} onPageChange={onPageChange} page={currentPage} CallDetail={CallDetail} GroupByDate={GroupByDate} />
+            <CallsTable calls={calls} onPageChange={onPageChange} page={currentPage} CallDetail={CallDetail} GroupByDate={GroupByDate} totalPages={totalPages} />
             
             <Modal showModal={showCallDetailModal}>
                 <CallDetailModal callDetail={callDetail} Close={CloseCallDetail} onArchive={onArchive} note={note} onNoteChange={onNoteChange} onAddNote={onAddNote} />
