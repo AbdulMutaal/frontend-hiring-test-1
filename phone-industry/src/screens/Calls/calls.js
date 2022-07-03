@@ -14,24 +14,34 @@ export default function Calls() {
     const [ note, setNote ] = useState('');
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
         console.log("Token");
         console.log(token);
 
         if((!token) || token === 'null') {
             getToken();
+            token = localStorage.getItem('token');
+
+            getCalls(token, 1);
+
         }
-        else {      
+        else {    
+            RefreshToken(token);  
             getCalls(token, 1);
         }
     
     }, [])
 
     function onPageChange(event: React.ChangeEvent<unknown>, page: number) {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
 
         if((!token) || token === 'null') {
             getToken();
+
+            token = localStorage.getItem('token');
+
+            setCurrentPage(page);     
+            getCalls(token, 10*page);
         }
         else { 
             setCurrentPage(page);     
@@ -39,12 +49,12 @@ export default function Calls() {
         }
     }
 
-    function getToken() {
+    async function getToken() {
         let postData = {};
         postData.username = 'AbdulMutaal';
         postData.password = 'Password'
 
-        axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/login`, postData)
+        await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/login`, postData)
         .then((response) => {
             if(response && response.data && response.data.access_token) {
                 localStorage.setItem('token', response.data.access_token);
@@ -59,16 +69,12 @@ export default function Calls() {
             }
         })
         .then((response) => {
-            console.log("CAlls");
-            console.log(response);
 
             if(response && response.data && response.data.nodes) {
                 setCalls(response.data.nodes);
             }
         })
         .catch((error) => {
-            console.log("ERROR");
-            console.log(error.response);
 
             if(error && error.response && error.response.data && error.response.data.statusCode === 401) {
                 localStorage.setItem('token', null);
@@ -83,8 +89,6 @@ export default function Calls() {
             }
         })
         .then((response) => {
-            console.log("CAll");
-            console.log(response);
 
             if(response && response.data) {
                 setCallDetail(response.data);
@@ -108,8 +112,7 @@ export default function Calls() {
             }
         })
         .then((response) => {
-            console.log('Archived');
-            console.log(response);
+
             let call1 = {...callDetail};
             if(response && response.data) {
                 call1.is_archived = response.data.is_archived;
@@ -126,8 +129,6 @@ export default function Calls() {
             }
         })
         .then((response) => {
-            console.log('Note');
-            console.log(response);
 
             if(response && response.data) {
                 let callD = {...callDetail};
@@ -142,10 +143,12 @@ export default function Calls() {
     function CallDetail(callId) {
         setShowCallDetailModal(true);
 
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
 
         if((!token) || token === 'null') {
             getToken();
+            token = localStorage.getItem('token');
+            getSingleCall(token, callId);
         }
         else { 
             getSingleCall(token, callId);
@@ -157,10 +160,13 @@ export default function Calls() {
     }
 
     function onArchive(id) {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
 
         if((!token) || token === 'null') {
             getToken();
+
+            token = localStorage.getItem('token');
+            ArchiveCall(token, id);
         }
         else { 
             ArchiveCall(token, id);
@@ -168,18 +174,19 @@ export default function Calls() {
     }
 
     function onNoteChange(e) {
-        // console.log("ON note change");
-        // console.log(e.target.value);
         setNote(e.target.value);
     }
 
     function onAddNote(id) {
-        const token = localStorage.getItem('token');
+        let token = localStorage.getItem('token');
         let postData = {};
         postData.content = note;
 
         if((!token) || token === 'null') {
             getToken();
+            token = localStorage.getItem('token');
+
+            AddNote(token, id, postData);
         }
         else { 
             AddNote(token, id, postData);
@@ -193,9 +200,21 @@ export default function Calls() {
             return new Date(a.created_at) - new Date(b.created_at)
         }).reverse();
 
-        console.log("GROUO");
-        console.log(grouped_calls);
         setCalls(grouped_calls);
+    }
+
+    async function RefreshToken(token) {
+        
+        await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/refresh-token`, {}, {
+            headers: {
+                "Authorization" : `Bearer ${token}`
+            }
+        })
+        .then((response) => {
+            if(response && response.data && response.data.access_token) {
+                localStorage.setItem("token", response.data.access_token);
+            }
+        })
     }
 
     return(
